@@ -3,6 +3,7 @@ use sdl2::pixels::Color;
 pub struct Config {
     pub window_size: (u32, u32),
     pub palette: Palette,
+    pub time_per_color_change: u32,
 }
 
 pub struct Palette {
@@ -44,5 +45,6 @@ pub fn init_cfg() -> Config {
             cyan: Color::RGB(112, 185, 202),
             white: Color::RGB(196, 196, 196),
         },
+        time_per_color_change: 200,
     }
 }
