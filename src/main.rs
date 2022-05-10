@@ -1,4 +1,5 @@
 mod config;
+mod game;
 
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
@@ -19,7 +20,7 @@ fn main() -> Result<(), Error> {
         .build()?;
 
     let mut canvas = window.into_canvas().build()?;
-    let _time_since_init = SystemTime::now();
+    let _game = game::init_game();
 
     canvas.set_draw_color(cfg.palette.black);
     canvas.clear();
