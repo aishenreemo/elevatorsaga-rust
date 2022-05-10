@@ -16,6 +16,21 @@ pub struct Palette {
     pub white: Color,
 }
 
+impl Palette {
+    pub fn as_array(&self) -> [Color; 8] {
+        [
+            self.black,
+            self.red,
+            self.green,
+            self.orange,
+            self.blue,
+            self.violet,
+            self.cyan,
+            self.white,
+        ]
+    }
+}
+
 pub fn init_cfg() -> Config {
     Config {
         window_size: (800, 600),
