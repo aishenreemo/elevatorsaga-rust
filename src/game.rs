@@ -1,15 +1,17 @@
+use crate::config::Config;
+
 use std::time::SystemTime;
 
 pub struct Game {
-    pub last_color_update: SystemTime,
     pub timestamp: SystemTime,
-    pub color_index: usize,
+    pub window_size: (u32, u32),
+    pub floors_length: usize,
 }
 
-pub fn init_game() -> Game {
+pub fn init_game(cfg: &Config) -> Game {
     Game {
-        last_color_update: SystemTime::now(),
         timestamp: SystemTime::now(),
-        color_index: 0,
+        window_size: cfg.window_size,
+        floors_length: cfg.floors_length,
     }
 }
