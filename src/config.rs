@@ -1,9 +1,14 @@
-use sdl2::pixels::Color;
+use crate::Error;
 
-pub struct Config {
+use sdl2::pixels::Color;
+use sdl2::ttf::Font;
+use sdl2::ttf::Sdl2TtfContext;
+
+pub struct Config<'ttf> {
     pub window_size: (u32, u32),
     pub palette: Palette,
-    pub time_per_color_change: u32,
+    pub floors_length: usize,
+    pub fonts: Fonts<'ttf>,
 }
 
 pub struct Palette {
@@ -17,23 +22,12 @@ pub struct Palette {
     pub white: Color,
 }
 
-impl Palette {
-    pub fn as_array(&self) -> [Color; 8] {
-        [
-            self.black,
-            self.red,
-            self.green,
-            self.orange,
-            self.blue,
-            self.violet,
-            self.cyan,
-            self.white,
-        ]
-    }
+pub struct Fonts<'ttf> {
+    pub mangonel: Font<'ttf, 'static>,
 }
 
-pub fn init_cfg() -> Config {
-    Config {
+pub fn init_cfg(ttf_context: &'_ Sdl2TtfContext) -> Result<Config<'_>, Error> {
+    Ok(Config {
         window_size: (800, 600),
         palette: Palette {
             black: Color::RGB(19, 23, 24),
@@ -45,6 +39,9 @@ pub fn init_cfg() -> Config {
             cyan: Color::RGB(112, 185, 202),
             white: Color::RGB(196, 196, 196),
         },
-        time_per_color_change: 200,
-    }
+        floors_length: 5,
+        fonts: Fonts {
+            mangonel: ttf_context.load_font("assets/fonts/Mangonel.ttf", 128)?,
+        },
+    })
 }
