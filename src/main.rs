@@ -15,7 +15,8 @@ pub enum Command {
 }
 
 fn main() -> Result<(), Error> {
-    let cfg = config::init_cfg();
+    let ttf_context = sdl2::ttf::init()?;
+    let cfg = config::init_cfg(&ttf_context)?;
     let sdl_context = sdl2::init()?;
     let video_subsystem = sdl_context.video()?;
 
@@ -25,7 +26,7 @@ fn main() -> Result<(), Error> {
         .build()?;
 
     let mut canvas = window.into_canvas().build()?;
-    let mut game = game::init_game();
+    let mut game = game::init_game(&cfg);
 
     display::render(&mut canvas, &game, &cfg)?;
 
@@ -37,7 +38,7 @@ fn main() -> Result<(), Error> {
             listener::handle_event(&mut commands, event)?;
         }
 
-        amend::update(&mut game, &cfg, &commands)?;
+        amend::update(&mut game, &canvas, &cfg, &commands)?;
         display::render(&mut canvas, &game, &cfg)?;
 
         sleep(Duration::new(0, 1_000_000_000u32 / 60));
