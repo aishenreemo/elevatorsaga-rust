@@ -8,6 +8,7 @@ pub struct Config<'ttf> {
     pub window_size: (u32, u32),
     pub palette: Palette,
     pub floors_length: usize,
+    pub elevators_length: usize,
     pub fonts: Fonts<'ttf>,
 }
 
@@ -40,6 +41,7 @@ pub fn init_cfg(ttf_context: &'_ Sdl2TtfContext) -> Result<Config<'_>, Error> {
             white: Color::RGB(196, 196, 196),
         },
         floors_length: 5,
+        elevators_length: 2,
         fonts: Fonts {
             mangonel: ttf_context.load_font("assets/fonts/Mangonel.ttf", 128)?,
         },
