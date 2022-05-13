@@ -12,6 +12,8 @@ pub type Error = Box<dyn ::std::error::Error>;
 
 pub enum Command {
     Quit,
+    ElevatorUp,
+    ElevatorDown,
 }
 
 fn main() -> Result<(), Error> {
