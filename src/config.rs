@@ -40,7 +40,7 @@ pub fn init_cfg(ttf_context: &'_ Sdl2TtfContext) -> Result<Config<'_>, Error> {
             cyan: Color::RGB(112, 185, 202),
             white: Color::RGB(196, 196, 196),
         },
-        floors_length: 5,
+        floors_length: 9,
         elevators_length: 2,
         fonts: Fonts {
             mangonel: ttf_context.load_font("assets/fonts/Mangonel.ttf", 128)?,

@@ -9,6 +9,11 @@ pub struct Game {
     pub elevators_length: usize,
 }
 
+pub struct _Elevator {
+    pub position: usize,
+    pub capacity: usize,
+}
+
 pub fn init_game(cfg: &Config) -> Game {
     Game {
         timestamp: SystemTime::now(),
