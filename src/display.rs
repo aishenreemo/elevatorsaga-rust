@@ -48,10 +48,10 @@ fn render_top_area(canvas: &mut WindowCanvas, game: &Game, cfg: &Config) -> Resu
 }
 
 fn render_elevators(
-    _canvas: &mut WindowCanvas,
-    _game: &Game,
-    _cfg: &Config,
-    _mr: Rect,
+    canvas: &mut WindowCanvas,
+    game: &Game,
+    cfg: &Config,
+    mr: Rect,
 ) -> Result<(), Error> {
     // ideal passenger height = 5% building_height
     // ideal elevator height = 10% building_height
@@ -60,6 +60,27 @@ fn render_elevators(
     // ideal passenger width = 1% of building_width
     // ideal elevator width = passenger_width * max passenger capacity of that elevator
     // ideal text floor label width = 4% building_width
+
+    let height = mr.height() as f32 / game.floors_length as f32;
+    let elevator_height = std::cmp::min((mr.height() as f32 * 0.1) as u32, height as u32);
+    let elevator_gap = (mr.width() as f32 * 0.03) as u32;
+
+    let mut x_offset = (mr.width() as f32 * 0.35) as i32;
+
+    for elevator in game.elevators.iter() {
+        let elevator_width = (mr.width() as f32 * 0.01) as u32 * elevator.capacity as u32;
+        let ground_y = (game.floors_length - elevator.position) as f32 * height;
+        let y_offset = mr.y() + ground_y as i32 - (elevator_height / 2) as i32;
+
+        let elevator_rect =
+            Rect::from_center((x_offset, y_offset), elevator_width, elevator_height);
+
+        canvas.set_draw_color(cfg.palette.blue);
+        canvas.fill_rect(elevator_rect)?;
+        canvas.set_draw_color(cfg.palette.green);
+        canvas.draw_rect(elevator_rect)?;
+        x_offset += elevator_width as i32 + elevator_gap as i32;
+    }
 
     Ok(())
 }
