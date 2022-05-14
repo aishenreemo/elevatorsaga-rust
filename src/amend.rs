@@ -1,4 +1,5 @@
 use crate::config::Config;
+use crate::game::ElevatorMoveState;
 use crate::game::Game;
 use crate::Command;
 use crate::Error;
@@ -6,19 +7,26 @@ use crate::Error;
 use sdl2::render::WindowCanvas;
 
 fn elevator_up(game: &mut Game) {
-    if game.elevators[0].position == game.floors_length - 1 {
+    let elevator = &mut game.elevators[0];
+    let pos = elevator.destination.unwrap_or(elevator.position);
+
+    if pos + 1 == game.floors_length {
         return;
     }
 
-    game.elevators[0].position += 1;
+    elevator.move_state = ElevatorMoveState::Up;
+    elevator.destination = Some(pos + 1);
 }
 
 fn elevator_down(game: &mut Game) {
-    if game.elevators[0].position == 0 {
+    let elevator = &mut game.elevators[0];
+    let pos = elevator.destination.unwrap_or(elevator.position);
+    if pos == 0 {
         return;
     }
 
-    game.elevators[0].position -= 1;
+    elevator.move_state = ElevatorMoveState::Down;
+    elevator.destination = Some(pos - 1);
 }
 
 pub fn update(
@@ -28,6 +36,22 @@ pub fn update(
     commands: &[Command],
 ) -> Result<(), Error> {
     game.window_size = canvas.output_size()?;
+
+    for elevator in game.elevators.iter_mut() {
+        if elevator.move_state != ElevatorMoveState::Idle {
+            let pos = elevator.destination.unwrap_or(elevator.position);
+            let diff = (pos as i32 - elevator.position as i32).abs() as f32;
+
+            if elevator.vertical_offset >= 1.0 {
+                elevator.move_state = ElevatorMoveState::Idle;
+                elevator.position = elevator.destination.take().unwrap();
+                elevator.vertical_offset = 0.0;
+                continue;
+            }
+
+            elevator.vertical_offset += 0.05 / diff;
+        }
+    }
 
     for command in commands.iter() {
         match command {

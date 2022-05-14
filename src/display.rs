@@ -70,7 +70,15 @@ fn render_elevators(
     for elevator in game.elevators.iter() {
         let elevator_width = (mr.width() as f32 * 0.01) as u32 * elevator.capacity as u32;
         let ground_y = (game.floors_length - elevator.position) as f32 * height;
-        let y_offset = mr.y() + ground_y as i32 - (elevator_height / 2) as i32;
+        let center = (elevator_height / 2) as i32;
+        let elevator_offset = if let Some(d) = elevator.destination {
+            let diff = (d as i32 - elevator.position as i32) * height as i32;
+            (diff as f32 * elevator.vertical_offset) as i32
+        } else {
+            0
+        };
+
+        let y_offset = (mr.y() + ground_y as i32) - (center + elevator_offset);
 
         let elevator_rect =
             Rect::from_center((x_offset, y_offset), elevator_width, elevator_height);

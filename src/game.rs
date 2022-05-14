@@ -9,10 +9,20 @@ pub struct Game {
     pub elevators: Vec<Elevator>,
 }
 
+#[derive(Copy, Clone, PartialEq)]
+pub enum ElevatorMoveState {
+    Idle,
+    Down,
+    Up,
+}
+
 #[derive(Copy, Clone)]
 pub struct Elevator {
     pub position: usize,
     pub capacity: usize,
+    pub vertical_offset: f32,
+    pub destination: Option<usize>,
+    pub move_state: ElevatorMoveState,
 }
 
 impl Default for Elevator {
@@ -20,6 +30,9 @@ impl Default for Elevator {
         Self {
             position: 0,
             capacity: 4,
+            vertical_offset: 0.0,
+            move_state: ElevatorMoveState::Idle,
+            destination: None,
         }
     }
 }
