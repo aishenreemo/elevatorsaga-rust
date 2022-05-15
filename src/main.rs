@@ -4,6 +4,9 @@ mod listener;
 
 pub mod config;
 pub mod game;
+pub mod utils;
+
+use game::Game;
 
 use std::thread::sleep;
 use std::time::Duration;
@@ -28,7 +31,7 @@ fn main() -> Result<(), Error> {
         .build()?;
 
     let mut canvas = window.into_canvas().build()?;
-    let mut game = game::init_game(&cfg);
+    let mut game = Game::new(&cfg)?;
 
     display::render(&mut canvas, &game, &cfg)?;
 
